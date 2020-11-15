@@ -1,6 +1,7 @@
 {
     "name": "clickpdx/libhttp",
     "description": "PHP wrapper classes for curl functions.",
+		"license": "MIT",
     "authors": [
         {
             "name": "Jose Bernal",
