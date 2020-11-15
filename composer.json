@@ -1,0 +1,10 @@
+{
+    "name": "clickpdx/libhttp",
+    "description": "PHP wrapper classes for curl functions.",
+    "authors": [
+        {
+            "name": "Jose Bernal",
+            "email": "jbernal.web.dev@gmail.com"
+        }
+    ]
+}
