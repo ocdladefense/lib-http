@@ -9,7 +9,7 @@ class Curl {
 	 *  when logging curl commands with CURLOPT_VERBOSE
 	 *   and CURLOPT_STDERR options.
 	 */
-	private static $LOG_FILE = BASE_PATH . "/log/curl.log";
+	public static $LOG_FILE = null;
 	
 		//this value is necessary to discard any garbage data
 	private static $LOG_DATA_START = "Trying";
@@ -23,8 +23,10 @@ class Curl {
 	public static function send($url, $options = array()) {
 
 		// If set, start logging the request.
-		$out  =  fopen(self::$LOG_FILE,"w+");
-		if( !$out ) throw new \Exception("Could not open PHP output stream.");
+		if(self::$LOG_FILE != null){
+			$out  =  fopen(self::$LOG_FILE,"w+");
+				if( !$out ) throw new \Exception("Could not open PHP output stream.");
+		}
 
 		
 				
@@ -71,9 +73,9 @@ class Curl {
 		
 
 
-		$logData = "Trying" . explode(self::$LOG_DATA_START, file_get_contents(self::$LOG_FILE))[1];
-
-		
+		if(self::$LOG_FILE != null){
+			$logData = "Trying" . explode(self::$LOG_DATA_START, file_get_contents(self::$LOG_FILE))[1];
+		}
 
 
 
