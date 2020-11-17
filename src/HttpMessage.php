@@ -2,6 +2,8 @@
 
 namespace Http;
 
+use DOMDocument;
+
 
 //remove virtural keyword in class definition?
 class HttpMessage {
@@ -53,7 +55,10 @@ class HttpMessage {
 
 	public function xml($responseBody){
 
-		var_dump($responseBody);
+		$domDoc = new DOMDocument();
+		$domDoc->loadXML($responseBody);
+		
+		return $domDoc;
 	}
 
 
