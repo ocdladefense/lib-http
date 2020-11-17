@@ -53,10 +53,10 @@ class HttpMessage {
 		return $this->getHeader('Content-Type')->getValue();
 	}
 
-	public function xml($responseBody){
+	public function xml(){
 
 		$domDoc = new DOMDocument();
-		$domDoc->loadXML($responseBody);
+		$domDoc->loadXML($this->body);
 		
 		return $domDoc;
 	}
