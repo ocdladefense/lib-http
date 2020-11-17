@@ -51,6 +51,11 @@ class HttpMessage {
 		return $this->getHeader('Content-Type')->getValue();
 	}
 
+	public function xml($responseBody){
+
+		var_dump($responseBody);
+	}
+
 
 	//headers
 	public function getHeaderCollection(){
