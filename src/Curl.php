@@ -37,7 +37,9 @@ class Curl {
 			curl_setopt($curl, \constant($opt), $value);
 		}
 
-		curl_setopt($curl, CURLOPT_STDERR, $out);
+		if(self::$LOG_FILE != null) {
+			curl_setopt($curl, CURLOPT_STDERR, $out);
+		}
 		curl_setopt($curl, CURLOPT_VERBOSE, true);
 		curl_setopt($curl, CURLOPT_HEADER, 1);
 
@@ -77,6 +79,8 @@ class Curl {
 
 		if(self::$LOG_FILE != null){
 			$logData = "Trying" . explode(self::$LOG_DATA_START, file_get_contents(self::$LOG_FILE))[1];
+		} else {
+			$logData = "";
 		}
 
 
