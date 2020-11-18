@@ -69,7 +69,9 @@ class Curl {
 		curl_close($curl);
 
 
-		fclose($out);  
+		if(self::$LOG_FILE != null){
+			fclose($out);
+		}  
 		
 
 
