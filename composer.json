@@ -1,5 +1,5 @@
 {
-    "name": "clickpdx/libhttp",
+    "name": "ocdladefense/lib-http",
     "description": "PHP wrapper classes for curl functions.",
 		"license": "MIT",
     "authors": [
