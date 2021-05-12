@@ -38,10 +38,29 @@ class Http {
 		$this->config = new CurlConfiguration($config);
 	}
 
+	// Move this config to config.php
+	public static function newSession(){
+
+        $config = array(
+            "verbose" => true,
+            "returntransfer" => true,
+            "ssl_verifyhost" => false,
+            "ssl_verifypeer" => false,
+            "useragent"	=> "Swagger-Codegen/1.0.0/php"
+        );
+            
+        return new Http($config);
+    }
+
 
 	// Send the specified HttpMessage, optionally
 	//   enable logging.
 	public function send(HttpMessage $msg, $log = false) {
+
+		if(is_subclass_of($msg, "Http\HttpRequest") && $msg->getUrl() == null){
+
+			throw new HttpException("ENDPOINT_ERROR: The endpoint/url cannot be null");
+		}
 
 		
 		// Static context so need to reset headers before further processing.
@@ -58,28 +77,40 @@ class Http {
 		// type from GET to POST *and we need
 		// to set the CURLOPT_POSTFIELDS options to the body
 		// of our request (JSON, etc.)
-		if($msg->isPost()) {
+		
+		$this->config->setMethod($msg->getMethod());
+		$methods = array(
+			"POST" => true,
+			"GET" => false,
+			"PUT" => true,
+			"DELETE" => false,
+			"PATCH" => true
+		);
+		
+
+		$method = $msg->getMethod();
+		$requires_body = $methods[$method];
+
+		if ($requires_body == true) {
+			
+			$this->config->setBody($msg->getBody());
+
 			if(gettype($msg->getBody()) != "string"){
 				throw new \Exception("INVALID_TYPE_ERROR: MESSAGE BODY MUST BE A STRING");
 			}
-
-			$this->config->setPost();
-			$this->config->setBody($msg->getBody());
-			
-		} elseif(!$msg->isGet()) {
-		
-			$this->config->setMethod($msg->getMethod());
 		}
-		
+
+		if($msg->isPost()) {
+			$this->config->setPost();
+		}
 		
 		
 		
 		// print_r(HttpHeader::toArray($msg->getHeaders()));
 		// Send using cURL with the 
+		//might need to strip out custom header before the request
 		$resp = Curl::send($msg->getUrl(), $this->config->getAsCurl());
 
-		//var_dump($resp);exit;
-		
 
 		$logArray = explode(" * ",$resp["log"]);
 		
@@ -88,12 +119,13 @@ class Http {
 		// $logMessage = implode("<br />",$logArray);
 		$this->httpSessionLog = $logArray;
 
-		$accept = $msg->getAccept() == null ? "Http\HttpResponse" : $msg->getAccept();
+		$responseClass = $msg->getHeader("X-HttpClient-ResponseClass") == null ? "Http\HttpResponse" : $msg->getHeader("X-HttpClient-ResponseClass")->getValue();
 		
 		
 		// Return a new instance of HttpResponse(); 
 		return self::newHttpResponse(
-			$accept,
+			$responseClass,
+			$msg->getUrl(),//endpoint
 			$resp["headers"],
 			$resp["body"],
 			$resp["info"]
@@ -104,10 +136,15 @@ class Http {
 		return $this->httpSessionLog;
 	}
 	
+	public function printSessionLog() {
+		print "<pre>".print_r($this->httpSessionLog, true) . "</pre>";
+	}
+	
 
-	private static function newHttpResponse($accept,$headers,$body,$info,$log = null){
-		$resp = new $accept($body);
+	private static function newHttpResponse($responseClass,$endpoint,$headers,$body,$info,$log = null){
+		$resp = new $responseClass($body);
 		$resp->setHeaders(HttpHeader::fromArray($headers));
+		$resp->addHeader(new HttpHeader("X-Request-Endpoint",$endpoint));
 		$resp->setCurlInfo($info);
 		$resp->setStatusCode($info["http_code"]);
 		return $resp;

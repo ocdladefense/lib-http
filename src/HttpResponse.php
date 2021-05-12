@@ -4,6 +4,8 @@ namespace Http;
 
 
 class HttpResponse extends HttpMessage {
+
+    private $statusCode; // Need to get rid of this.
 	
     
     public function __construct($body = null){
@@ -21,10 +23,7 @@ class HttpResponse extends HttpMessage {
 
     public function isFile(){
 
-        if($this->body != null && gettype($this->body) == "object"){
-
-            return get_class($this->body) == "File\File";
-        }
+        return $this->body != null && gettype($this->body) == "object" && get_class($this->body) == "File\File";
     }
 
     //Setters
@@ -36,7 +35,14 @@ class HttpResponse extends HttpMessage {
     }
 
     public function setStatusCode($code){
+
+        if(isset($this->statusCode)) {
+
+            throw new Exception("QUIT TRYING TO SET THE STATUS CODE TWICE.");
+        }
+
     	$this->statusCode = $code;
+
     }
     
     public function setErrorStatus(){
@@ -56,8 +62,14 @@ class HttpResponse extends HttpMessage {
     	$this->headers->addHeader(new HttpHeader("Location",$url));
     }
 
-    public function isSuccess(){
-        return $this->getStatusCode() == 200 || $this->getStatusCode() == 201;
+    public function isSuccess() {
+
+        if($this->statusCode == null){
+
+            throw new \Exception("STATUS_CODE_ERROR: The status code is null for this response");
+        }
+        
+        return $this->statusCode >= 200 && $this->statusCode < 300;
     }
 
     //Getters
@@ -73,8 +85,8 @@ class HttpResponse extends HttpMessage {
 		return $this->errorNum;
 	}
 
-	public function success(){
-		return $this->status == 200;
+	public function success() {
+		return $this->isSuccess();
 	}
 
     public function getPhpArray(){
