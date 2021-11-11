@@ -32,14 +32,14 @@ class HttpRequest extends HttpMessage {
 
 	private $platform = "";
 	
-	const ALLOWED_VERBS = array(
-		"GET",
-		"OPTIONS",
-		"POST",
-		"PUT",
-		"PATCH",
-		"DELETE"
-	);
+	// const ALLOWED_VERBS = array(
+	// 	"GET",
+	// 	"OPTIONS",
+	// 	"POST",
+	// 	"PUT",
+	// 	"PATCH",
+	// 	"DELETE"
+	// );
 
 	public function __construct($url = null) {
 
