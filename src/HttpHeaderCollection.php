@@ -88,9 +88,9 @@ class HttpHeaderCollection {
 	public static function fromArray(array $headers) {
 		$tmp = array();
 		foreach($headers as $key => $value) {
-			return new HttpHeader($key,$value);
+			$tmp[] = new HttpHeader($key,$value);
 		}
 		
-		return $tmp;
+		return new self($tmp);
 	}
 }
