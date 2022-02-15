@@ -91,6 +91,6 @@ class HttpHeaderCollection {
 			$tmp[] = new HttpHeader($key,$value);
 		}
 		
-		return $tmp;
+		return new self($tmp);
 	}
 }
