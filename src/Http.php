@@ -28,6 +28,10 @@ class Http {
 	}
 	
 	
+    public static function isHttpResponse($object){
+
+        return is_object($object) && (get_class($object) === "Http\HttpResponse" || is_subclass_of($object, "Http\HttpResponse", false));
+    }
 	
 	
 	
