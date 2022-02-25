@@ -321,6 +321,7 @@ class HttpRequest extends HttpMessage {
 		
 		// @todo see if this can't be moved into the constructor.
 		$request->addHeader(new HttpHeader("Request-URI", $env->server["requestUri"]));
+		$request->addHeader(new HttpHeader("Accept", $env->http->headers["Accept"]));
 
 		if($request->isPost()) {
 			$request->addHeader(new HttpHeader("Content-Type", $env->http->headers["Content-Type"]));
