@@ -4,7 +4,7 @@ namespace Http;
 
 
 
-class MediaRange {
+class MimeType {
 
     private $type;
 
@@ -29,21 +29,4 @@ class MediaRange {
 
         return $this->subtype;
     }
-
-
-    public function includes(MimeType $mime) {
-
-        $type = $mime->getType();
-        $subtype = $mime->getSubtype();
-
-        if($this->subtype == "*" && $type == $this->type) {
-            return true;
-        } else if($this->type == $type && $this->subtype == $subtype) {
-            return true;
-        }
-
-        return false;
-    }
-
-
 }
