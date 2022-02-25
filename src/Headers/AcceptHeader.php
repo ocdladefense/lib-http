@@ -24,17 +24,31 @@ class AcceptHeader extends HttpHeader {
 
         $struct = $this->parse();
 
- 
+        return array_key_exists($mimeType, $struct);
+        // Build an additional array whose keys are the same, but whose values
+        // are *only the q values;
+        // Also this lets us specify the "default" q value of 1.0;
+     }
+     
 
-        // arsort($keyedOptions);
 
+     
+    public function getByWeight() {
+        
+        $struct = $this->parse();
+        
+        $weighted = array();
+
+        foreach($struct as $range => $media) {
+            $weight = null == $media["q"] ? 1.0 : (float)$media["q"];
+            $weighted[$range] = $weight;
+        }
+
+        arsort($weighted);
        
-
-        return array_keys($keyedOptions)[0];
-
-        // Compare $mimeType to the $struct and return a boolean.
-        return true;
+        return $weighted;
     }
+
 
 
     public function parse() {
@@ -49,20 +63,27 @@ class AcceptHeader extends HttpHeader {
         // These are called media type parameters;
         // or specifically a "q" parameter; or any other optional "extension" parameters.
 
-        $acceptParams = array_flip($ranges);
+        $acceptParams = array();
 
         foreach($ranges as $media) {
-
+    
  
             // "text/html; q=0.8"
             $tmp = explode(";", $media);
-            $type = array_shift($params);
-            $params = array(); // Should be populated by key value pairs.
+            $type = array_shift($tmp);
+            $acceptParams[$type] = array();
+
             // --> array(" q=0.8");
             // array(" q","0.8");
             // array("q","0.8");
-            array_walk($tmp, function($param) {
-                list($key,$value) = array_map(function($keyOrValue) { return trim($keyOrValue); }, explode("=", $param));
+            array_walk($tmp, function($param) use(&$acceptParams,$type) {
+
+                $double = explode("=", $param);
+                
+                $trim = function($v) { return trim($v); };
+                
+                list($key,$value) = array_map($trim, $double);
+                
                 $acceptParams[$type][$key] = $value;
             });
         }
