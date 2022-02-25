@@ -60,7 +60,11 @@ class HttpHeaderCollection {
 		
 		$arrange = array_values($tmp);
 
-		return $arrange[count($arrange)-1];
+		$header = $arrange[count($arrange)-1];
+
+		$headerClass = ("\Http\\".$name."Header");
+
+		return class_exists($headerClass) ? new $headerClass($header->getValue()) : $header;
 	}
 
 
