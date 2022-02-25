@@ -13,10 +13,9 @@ class MediaRange {
 
     public function __construct($mimeType) {
 
-        $parts = array_map(function($part) { return trim($media); }, explode(";", $mimeType));
-        $range = array_shift($parts);
+        $parts = array_map(function($part) { return trim($part); }, explode("/", $mimeType));
 
-        list($this->type,$this->subtype) = explode("/",$range);
+        list($this->type,$this->subtype) = $parts;
     }
 
 
