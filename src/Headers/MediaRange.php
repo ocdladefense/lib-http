@@ -15,7 +15,14 @@ class MediaRange {
 
         $parts = array_map(function($part) { return trim($part); }, explode("/", $mimeType));
 
-        list($this->type,$this->subtype) = $parts;
+        if(count($parts) !== 2) {
+            throw new Exception("INVALID_HEADER_VALUE_ERROR: The specified media range syntax is invalid: {$mimeType}.");
+        }
+
+        $subtype = explode("+",$parts[1]);
+        $this->subtype = array_pop($subtype);
+
+        $this->type = $parts[0];
     }
 
 
@@ -36,9 +43,12 @@ class MediaRange {
         $type = $mime->getType();
         $subtype = $mime->getSubtype();
 
+
         if($this->subtype == "*" && $type == $this->type) {
             return true;
         } else if($this->type == $type && $this->subtype == $subtype) {
+            return true;
+        } else if($this->type == "*") {
             return true;
         }
 
