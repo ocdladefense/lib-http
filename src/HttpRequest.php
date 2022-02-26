@@ -89,11 +89,11 @@ class HttpRequest extends HttpMessage {
 	
 	
 	public function isMultipart() {
-
+		
 		$multipart = $this->headerLike("Content-Type", MIME_MULTIPART_FORM_DATA);
 
 		$header = $this->headers->getHeader("Content-Type", false);
-
+		if(null == $header) return false;
 		$probably = $header->equals(MIME_MULTIPART_FORM_DATA);
 
 		if(!$multipart && $probably){
