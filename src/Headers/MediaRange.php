@@ -16,7 +16,7 @@ class MediaRange {
         $parts = array_map(function($part) { return trim($part); }, explode("/", $mimeType));
 
         if(count($parts) !== 2) {
-            throw new Exception("INVALID_HEADER_VALUE_ERROR: The specified media range syntax is invalid: {$mimeType}.");
+            throw new \Exception("INVALID_HEADER_VALUE_ERROR: The specified media range syntax is invalid: {$mimeType}.");
         }
 
         $subtype = explode("+",$parts[1]);
