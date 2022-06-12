@@ -13,7 +13,8 @@
             "src/"
         ],
         "files":[
-            "src/HttpConstants.php"
+            "src/HttpConstants.php",
+            "src/HttpStatus.php"
         ]
     }
 }

@@ -14,10 +14,10 @@ class HttpHeader {
     const PARAMS_MARKER = ";";
     
     
-    private $name;
+    protected $name;
     
     
-    private $value;
+    protected $value;
 
 
 		/**

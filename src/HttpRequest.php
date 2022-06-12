@@ -314,7 +314,7 @@ class HttpRequest extends HttpMessage {
 		
 		$env = self::newFromApacheEnvironment();
 
-		
+		// var_dump($_POST);
 		$request = new self($env->server["requestUri"]);
 		$request->setPlatform($envkey);
 		$request->setMethod($env->server["requestMethod"]);
@@ -344,9 +344,9 @@ class HttpRequest extends HttpMessage {
 			$request->setBody((object)$_POST);
 
 
-			//if first index is empty dont execute?
+			// If first index is empty dont execute?
 			if(is_array($_FILES) && !empty($_FILES) ){
-					//try moving and uploading files
+				// Try moving and uploading files
 				try {
 					global $fileConfig;
 				
@@ -355,6 +355,7 @@ class HttpRequest extends HttpMessage {
 					$handler->createDirectory();
 		
 					$uploads = new PhpFileUpload($_FILES);
+					
 					$tempList = $uploads->getTempFiles();
 					$destList = $uploads->getDestinationFiles();
 		
@@ -373,7 +374,7 @@ class HttpRequest extends HttpMessage {
 						$i++;
 					}
 	
-
+					
 					$request->setFiles($movedFiles);
 
 				} catch(\Exception $e){
@@ -392,6 +393,8 @@ class HttpRequest extends HttpMessage {
 		} else {
 			$request->setBody(null);
 		}
+
+		
 			
 		return $request;
 	}
