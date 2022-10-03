@@ -148,9 +148,9 @@ class HttpRequest extends HttpMessage {
 
 
 	private static function parseHostname($url) {
-		list($scheme,$address) = explode("://",$url);
+		@list($scheme,$address) = explode("://",$url);
 
-		$parts = explode("/",$address);
+		$parts = explode("/",$address ?: "");
 
 		$host = array_shift($parts);
 		return array($host, "/".implode("/",$parts));
