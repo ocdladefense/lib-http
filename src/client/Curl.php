@@ -77,9 +77,11 @@ class Curl {
 		if($loggingEnabled) fclose($out);  
 		
 
+		$logData = "";
 
-		if($loggingEnabled) $logData = "Trying" . explode(self::$LOG_DATA_START, file_get_contents(self::$LOG_FILE))[1];
-
+		if($loggingEnabled) {
+			$logData = "Trying" . explode(self::$LOG_DATA_START, file_get_contents(self::$LOG_FILE))[1];
+		}
 		
 
 
