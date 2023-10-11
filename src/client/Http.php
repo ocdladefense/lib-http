@@ -108,8 +108,9 @@ class Http {
 			$this->config->setPost();
 		}
 		
-		
-		
+		$responseClass = $msg->getHeader("X-HttpClient-ResponseClass") == null ? "Http\HttpResponse" : $msg->getHeader("X-HttpClient-ResponseClass")->getValue();
+
+		$msg->removeHeader("X-HttpClient-ResponseClass");
 		// print_r(HttpHeader::toArray($msg->getHeaders()));
 		// Send using cURL with the 
 		//might need to strip out custom header before the request
@@ -123,7 +124,7 @@ class Http {
 		// $logMessage = implode("<br />",$logArray);
 		$this->httpSessionLog = $logArray;
 
-		$responseClass = $msg->getHeader("X-HttpClient-ResponseClass") == null ? "Http\HttpResponse" : $msg->getHeader("X-HttpClient-ResponseClass")->getValue();
+
 		
 		
 		// Return a new instance of HttpResponse(); 

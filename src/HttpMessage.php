@@ -81,6 +81,10 @@ class HttpMessage {
 		return $this->headers;
 	}
 
+	public function removeHeader($name) {
+		return $this->headers->removeHeader($name);
+	}
+
 
 	public function setHeaders(array $headers) {
 		if($this->isSigned) throw new \Exception("INVALID HEADER OPERATION");

@@ -166,7 +166,7 @@ class HttpHeaderCollection {
 	}
 
 	public static function fromHeaders(array $headers) {
-		$collection = new HttpHeaderColection();
+		$collection = new HttpHeaderCollection();
 		$collection->addHeaders($headers);
 
 		return $collection;
