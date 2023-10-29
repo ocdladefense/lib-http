@@ -65,6 +65,11 @@ class HttpMessage {
 		return $this->body;
 	}
 
+	public function getBodyAsJson() {
+		return json_decode($this->body);
+	}
+
+	
 	
 	public function getContentType(){
 		return $this->getHeader('Content-Type')->getValue();

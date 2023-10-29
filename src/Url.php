@@ -22,9 +22,9 @@ class Url {
 
     public static function formatParams($params, $contentType = "x-www-form-urlencoded") {
 
-        $vars = array_map(function($value,$key) {
-            return "${key}=${value}";
-        }, $params, array_keys($params));
+        $vars = array_map(function($key,$value) {
+            return null == $value ? $key : "${key}=${value}";
+        }, array_keys($params), $params);
 
         return implode("&",$vars);
     }
