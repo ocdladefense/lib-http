@@ -39,6 +39,14 @@ class Http {
 	//  It has convenience methods to change the curl configuration.
 	public function __construct($config = null) {
 
+		$config = $config ?? array(
+			"returntransfer"        => true,
+			"useragent"             => "Mozilla/5.0",
+			"followlocation"        => true,
+			"ssl_verifyhost"        => false,
+			"ssl_verifypeer"        => false
+		);
+		
 		$this->config = new CurlConfiguration($config);
 	}
 
@@ -73,9 +81,11 @@ class Http {
 		// Convert from array of HttpHeaders to a string array
 		// conforming to cURL spec.
 
-		$headers = !isset($this->overrideHeaders) ? $msg->getHeaders()->getHeadersAsArray() : $this->overrideHeaders;
-		$this->config->setHeaders($headers);
-		
+		$headers = (!isset($this->overrideHeaders) && null != $msg->getHeaders()) ? $msg->getHeaders()->getHeadersAsArray() : $this->overrideHeaders;
+
+		if(null != $headers) {
+			$this->config->setHeaders($headers);
+		}
 		
 		// For POST requests we need to change the request
 		// type from GET to POST *and we need
@@ -148,7 +158,7 @@ class Http {
 
 	private static function newHttpResponse($responseClass,$endpoint,$headers,$body,$info,$log = null){
 
-		if($headers["Content-Type"] == "application/octetstream"){
+		if(isset($headers["Content-Type"]) && $headers["Content-Type"] == "application/octetstream"){
 
 			$responseClass = "\Http\HttpResponse";
 		}

@@ -18,13 +18,22 @@ class Url {
         return $this->params;
     }
 
-    public function __toString() {
+
+
+    public static function formatParams($params, $contentType = "x-www-form-urlencoded") {
 
         $vars = array_map(function($value,$key) {
             return "${key}=${value}";
-        }, $this->params, array_keys($this->params));
+        }, $params, array_keys($params));
 
-        $query = implode("&",$vars);
+        return implode("&",$vars);
+    }
+
+
+
+    public function __toString() {
+
+        $query = self::formatParams($this->params);
 
         return empty($query) ? $this->url : ($this->url . "?" . $query);
     }

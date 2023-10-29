@@ -8,7 +8,7 @@ namespace Http;
 		private $configs;
 		
 		
-		public function __construct($config) {
+		public function __construct($config = array()) {
 
 			$this->configs = array_merge(self::$defaults, $config);
 		}

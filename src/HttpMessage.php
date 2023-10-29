@@ -82,7 +82,7 @@ class HttpMessage {
 	}
 
 	public function removeHeader($name) {
-		return $this->headers->removeHeader($name);
+		return null == $this->headers ? null : $this->headers->removeHeader($name);
 	}
 
 
@@ -121,7 +121,8 @@ class HttpMessage {
 			return $this->getPseudoHeader($name);
 		}
 		
-		return $this->headers->getHeader($name);
+		
+		return null == $this->headers ? null : $this->headers->getHeader($name);
 	}
 
 	protected function getPseudoHeader($name) {
