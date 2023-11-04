@@ -25,6 +25,10 @@ class Url {
 
     public function __construct($url) {
         $this->url = $url;
+		$parts = explode("?", $url);
+		$queryString = count($parts) > 1 ? $parts[1] : null;
+
+		$this->params = $queryString == null ? array() : self::parseQueryString($queryString);
     }
 
 
@@ -110,9 +114,29 @@ class Url {
         return $this->params;
     }
 
+	public function getParam($key) {
+		return $this->params[$key];
+	}
 
 
-    public static function formatParams($params, $contentType = "x-www-form-urlencoded") {
+
+	public static function parseQueryString($queryString) {
+
+		$kvp = explode("&", $queryString);
+		$params = array();
+		foreach($kvp as $param) {
+			list($key,$value) = explode("=",$param);
+
+			// value can be null.
+			$params[$key] = $value;
+
+
+		}
+		return $params;
+	}
+
+
+    public static function formatParams($params, $contentType = "application/x-www-form-urlencoded") {
 
         $vars = array_map(function($key,$value) {
             return null == $value ? $key : "${key}=${value}";
